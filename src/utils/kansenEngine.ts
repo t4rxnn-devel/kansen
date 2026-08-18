@@ -39,7 +39,7 @@ export class KansenWasmEngine {
     const delayNs = Number((0.005 + gateCount * 0.0008).toFixed(4));
 
     const vcdStream = `$date 2026-08-18 $end
-$version Kansen Silicon Net V4.0 VCD $end
+$version Kansen Core EDA Console VCD $end
 $timescale 1ps $end
 $scope module ${moduleName} $end
 $var wire 1 # CLK $end
@@ -524,7 +524,7 @@ export class KansenGdsFormatter {
     const binaryGds = this.generateBinaryGdsStream(designName);
     zip.file('kansen_hardware_layout.gds', binaryGds);
     zip.file(`${designName}.v`, verilogCode);
-    zip.file('MANIFEST.txt', `KANSEN SILICON NET V4.0 - TAPE-OUT BUNDLE FOR ${designName}`);
+    zip.file('MANIFEST.txt', `KANSEN CORE EDA CONSOLE - TAPE-OUT BUNDLE FOR ${designName}`);
     return await zip.generateAsync({ type: 'blob' });
   }
 }
@@ -719,5 +719,5 @@ export function predictSiliconArchitecture(
     return `[SHINZU FAB TELEMETRY] Extreme UV (13.5nm wavelength) utilizes Laser-Produced Plasma (LPP) firing liquid tin droplets hit by CO2 laser pulses at 50kHz inside hydrogen vacuum chambers.`;
   }
 
-  return `[SHINZU // QUANTUM SILICON CORE] Query received: "${prompt}". Operating on Kansen Silicon Net V4.0. Hardware synthesis pipelines online. Run [/stream_test] for vector verification or [/tapeout] to produce binary GDSII packages.`;
+  return `[SHINZU // QUANTUM SILICON CORE] Query received: "${prompt}". Operating on Kansen Core EDA Console. Hardware synthesis pipelines online. Run [/stream_test] for vector verification or [/tapeout] to produce binary GDSII packages.`;
 }

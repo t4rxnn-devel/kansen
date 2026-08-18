@@ -1,5 +1,5 @@
 {
-  "name": "Kansen Silicon Net V4.0",
+  "name": "Kansen Core EDA Console",
   "description": "Enterprise-Grade EDA Lab & Semiconductor Fab Certification Console with Real-Time Verilog Synthesis, Waveform Logic Analyzer, Schematic Netlists, PVT Stress Testing, SAT Solver, Macro Placement, and 3D Wafer Telemetry.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]

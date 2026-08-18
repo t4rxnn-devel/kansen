@@ -1,17 +1,24 @@
 import React, { useRef, useState, useEffect } from 'react';
 import * as THREE from 'three';
-import { WaveSignal } from '../types';
-import { Activity, ZoomIn, ZoomOut, RotateCcw, MousePointer, Box, Layers } from 'lucide-react';
+import { WaveSignal, ProcessCorner } from '../types';
+import { Activity, ZoomIn, ZoomOut, RotateCcw, MousePointer, Box, Layers, AlertTriangle } from 'lucide-react';
 import { soundFx } from '../utils/soundEffects';
+import { PvtEngine } from '../utils/kansenEngine';
 
 interface Quadrant3_WaveformAnalyzerProps {
   signals: WaveSignal[];
   isSimulating: boolean;
+  pvtCorner?: ProcessCorner;
+  pvtVoltage?: number;
+  pvtTemperature?: number;
 }
 
 export const Quadrant3_WaveformAnalyzer: React.FC<Quadrant3_WaveformAnalyzerProps> = ({
   signals,
-  isSimulating
+  isSimulating,
+  pvtCorner = 'TT',
+  pvtVoltage = 1.0,
+  pvtTemperature = 25
 }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const threeMountRef = useRef<HTMLDivElement | null>(null);
@@ -57,12 +64,17 @@ export const Quadrant3_WaveformAnalyzer: React.FC<Quadrant3_WaveformAnalyzerProp
     // Group for Waveform 3D Extrusions
     const waveGroup = new THREE.Group();
 
+    // Calculate PVT Delay Factor to stretch signals under PVT Stress
+    const pvtFactor = PvtEngine.calculatePvtDelayFactor(pvtCorner as ProcessCorner, pvtVoltage, pvtTemperature);
+
     signals.forEach((sig, sIdx) => {
       const zPos = (sIdx - signals.length / 2) * 3;
       const points: THREE.Vector3[] = [];
 
       sig.data.forEach((val, stepIdx) => {
-        const xPos = (stepIdx - sig.data.length / 2) * 2;
+        // Delay shifts signal horizontally (setup delay drift)
+        const delayOffset = (pvtFactor - 1.0) * 0.4;
+        const xPos = (stepIdx - sig.data.length / 2) * 2 + delayOffset;
         const isHigh = val === 1 || val === '1';
         const yPos = isHigh ? 2 : 0;
 
@@ -90,6 +102,16 @@ export const Quadrant3_WaveformAnalyzer: React.FC<Quadrant3_WaveformAnalyzerProp
     const animate = () => {
       animId = requestAnimationFrame(animate);
       waveGroup.rotation.y += 0.005;
+
+      // Thermal Jitter: mesh vibration at higher temperature corners
+      if (pvtTemperature > 50) {
+        const jitterIntensity = (pvtTemperature - 50) / 75 * 0.04;
+        waveGroup.position.x = Math.sin(Date.now() * 0.05) * jitterIntensity;
+        waveGroup.position.y = Math.cos(Date.now() * 0.07) * jitterIntensity;
+      } else {
+        waveGroup.position.set(0, 0, 0);
+      }
+
       renderer.render(scene, camera);
     };
     animate();
@@ -112,7 +134,7 @@ export const Quadrant3_WaveformAnalyzer: React.FC<Quadrant3_WaveformAnalyzerProp
       }
       renderer.dispose();
     };
-  }, [viewMode, signals]);
+  }, [viewMode, signals, pvtCorner, pvtVoltage, pvtTemperature]);
 
   // Render 2D logic waveform on canvas
   useEffect(() => {
@@ -131,15 +153,30 @@ export const Quadrant3_WaveformAnalyzer: React.FC<Quadrant3_WaveformAnalyzerProp
     const width = rect.width;
     const height = rect.height;
 
-    // Clear canvas
-    ctx.fillStyle = '#000000';
+    // Calculate PVT Delay Factor
+    const pvtFactor = PvtEngine.calculatePvtDelayFactor(pvtCorner as ProcessCorner, pvtVoltage, pvtTemperature);
+    const isTimingViolation = pvtFactor > 1.25;
+    const delayOffset = (pvtFactor - 1.0) * 15 * zoomScale; // Shift in pixels
+
+    // Clear canvas & fill warning background if timing violated
+    ctx.fillStyle = isTimingViolation ? '#080000' : '#000000';
     ctx.fillRect(0, 0, width, height);
+
+    if (isTimingViolation) {
+      // Draw background setup-slack error indicators
+      ctx.fillStyle = 'rgba(220, 38, 38, 0.05)';
+      ctx.fillRect(90, 0, width, height);
+      
+      ctx.fillStyle = '#dc2626';
+      ctx.font = 'bold 9px monospace';
+      ctx.fillText('⚠️ PVT TIMING VIOLATION: SLACK OVERRUN', width - 210, 12);
+    }
 
     // Draw timing grid lines
     const cycleWidth = 40 * zoomScale;
     const startX = 90 + panOffset;
 
-    ctx.strokeStyle = '#18181b';
+    ctx.strokeStyle = isTimingViolation ? '#220808' : '#18181b';
     ctx.lineWidth = 0.5;
 
     // Draw vertical clock cycle grid lines
@@ -152,7 +189,7 @@ export const Quadrant3_WaveformAnalyzer: React.FC<Quadrant3_WaveformAnalyzerProp
       // Cycle numbers
       const cycleIdx = Math.floor((x - startX) / cycleWidth);
       if (cycleIdx >= 0) {
-        ctx.fillStyle = '#52525b';
+        ctx.fillStyle = isTimingViolation ? '#883333' : '#52525b';
         ctx.font = '9px monospace';
         ctx.fillText(`${cycleIdx * 10}ns`, x + 2, 12);
       }
@@ -179,7 +216,22 @@ export const Quadrant3_WaveformAnalyzer: React.FC<Quadrant3_WaveformAnalyzerProp
       ctx.lineTo(width, yBase + 4);
       ctx.stroke();
 
-      // Draw Wave Path
+      // Draw setup drift shading region if delay exists
+      if (delayOffset > 1) {
+        ctx.fillStyle = 'rgba(220, 38, 38, 0.12)';
+        sig.data.forEach((val, stepIdx) => {
+          const x1 = startX + stepIdx * cycleWidth;
+          const isHigh = val === 1 || val === '1';
+          if (stepIdx > 0) {
+            const prevHigh = sig.data[stepIdx - 1] === 1 || sig.data[stepIdx - 1] === '1';
+            if (prevHigh !== isHigh && sig.type !== 'bus') {
+              ctx.fillRect(x1, yHigh, delayOffset, yBase - yHigh);
+            }
+          }
+        });
+      }
+
+      // Draw Wave Path (shifted by delayOffset to represent physical delay)
       ctx.strokeStyle = sigColor;
       ctx.lineWidth = 2;
       ctx.shadowColor = sigColor;
@@ -188,7 +240,8 @@ export const Quadrant3_WaveformAnalyzer: React.FC<Quadrant3_WaveformAnalyzerProp
       ctx.beginPath();
 
       sig.data.forEach((val, stepIdx) => {
-        const x1 = startX + stepIdx * cycleWidth;
+        // Horizontally delayed start/end positions
+        const x1 = startX + stepIdx * cycleWidth + delayOffset;
         const x2 = x1 + cycleWidth;
 
         if (sig.type === 'bus') {
@@ -244,7 +297,7 @@ export const Quadrant3_WaveformAnalyzer: React.FC<Quadrant3_WaveformAnalyzerProp
       ctx.fillText(`${timeNs}ns`, mousePos.x - 18, height - 6);
     }
 
-  }, [signals, zoomScale, panOffset, mousePos, isSimulating, viewMode]);
+  }, [signals, zoomScale, panOffset, mousePos, isSimulating, viewMode, pvtCorner, pvtVoltage, pvtTemperature]);
 
   // Mouse drag pan handler
   const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {

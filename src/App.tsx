@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { SectorType, FabModule, EdaLab, TerminalLog } from './types';
+import { SectorType, FabModule, EdaLab, TerminalLog, ProcessCorner } from './types';
 import { fabModulesData } from './data/fabModules';
 import { edaLabsData } from './data/edaLabs';
 import { soundFx } from './utils/soundEffects';
@@ -78,12 +78,16 @@ export default function App() {
   const [isSynthesizing, setIsSynthesizing] = useState<boolean>(false);
 
   // System Diagnostic Logs State
+  const [pvtCorner, setPvtCorner] = useState<ProcessCorner>('TT');
+  const [pvtVoltage, setPvtVoltage] = useState<number>(1.0);
+  const [pvtTemperature, setPvtTemperature] = useState<number>(25);
+
   const [logs, setLogs] = useState<TerminalLog[]>([
     {
       id: '1',
       timestamp: new Date().toISOString().substring(11, 23),
       type: 'INFO',
-      message: 'KANSEN SILICON NET V4.0 SOVEREIGN KERNEL INITIALIZED.',
+      message: 'KANSEN CORE EDA CONSOLE INITIALIZED.',
       source: 'SYS_CORE'
     },
     {
@@ -288,7 +292,7 @@ export default function App() {
       setScanlinesEnabled(!scanlinesEnabled);
       addLog('INFO', `CRT SCANLINES OVERLAY TOGGLED.`, 'CLI_THEME');
     } else if (cleanCmd === 'info') {
-      addLog('INFO', 'KANSEN SILICON NET V4.0 // 3nm GAA EDA & FAB SYSTEM // CLASSIFIED TIER 5', 'SYS_INFO');
+      addLog('INFO', 'KANSEN CORE EDA CONSOLE // 3nm GAA EDA & FAB SYSTEM // CLASSIFIED TIER 5', 'SYS_INFO');
     } else {
       addLog('ERR', `UNKNOWN COMMAND '${cmd}'. TYPE 'help' FOR LIST OF SYSTEM COMMANDS.`, 'CLI_ERR');
     }
@@ -396,6 +400,9 @@ export default function App() {
                 <Quadrant3_WaveformAnalyzer
                   signals={currentEdaLab.defaultSignals}
                   isSimulating={isSynthesizing}
+                  pvtCorner={pvtCorner}
+                  pvtVoltage={pvtVoltage}
+                  pvtTemperature={pvtTemperature}
                 />
               </div>
 
@@ -408,6 +415,12 @@ export default function App() {
                   onToggle3dTab={setIs3dActive}
                   verilogCode={currentEdaLab.verilogCode}
                   moduleTitle={currentEdaLab.title}
+                  pvtCorner={pvtCorner}
+                  setPvtCorner={setPvtCorner}
+                  pvtVoltage={pvtVoltage}
+                  setPvtVoltage={setPvtVoltage}
+                  pvtTemperature={pvtTemperature}
+                  setPvtTemperature={setPvtTemperature}
                 />
               </div>
             </div>

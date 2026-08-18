@@ -40,6 +40,12 @@ interface Quadrant4_TelemetryWaferProps {
   onToggle3dTab: (show3d: boolean) => void;
   verilogCode?: string;
   moduleTitle?: string;
+  pvtCorner?: ProcessCorner;
+  setPvtCorner?: (corner: ProcessCorner) => void;
+  pvtVoltage?: number;
+  setPvtVoltage?: (v: number) => void;
+  pvtTemperature?: number;
+  setPvtTemperature?: (t: number) => void;
 }
 
 export const Quadrant4_TelemetryWafer: React.FC<Quadrant4_TelemetryWaferProps> = ({
@@ -48,7 +54,13 @@ export const Quadrant4_TelemetryWafer: React.FC<Quadrant4_TelemetryWaferProps> =
   is3dActive,
   onToggle3dTab,
   verilogCode = '',
-  moduleTitle = 'Active Circuit'
+  moduleTitle = 'Active Circuit',
+  pvtCorner: propPvtCorner,
+  setPvtCorner: propSetPvtCorner,
+  pvtVoltage: propPvtVoltage,
+  setPvtVoltage: propSetPvtVoltage,
+  pvtTemperature: propPvtTemperature,
+  setPvtTemperature: propSetSetPvtTemperature
 }) => {
   const mountRef = useRef<HTMLDivElement | null>(null);
   
@@ -67,9 +79,16 @@ export const Quadrant4_TelemetryWafer: React.FC<Quadrant4_TelemetryWaferProps> =
   const [isScanning, setIsScanning] = useState<boolean>(false);
 
   // PVT Stress State
-  const [pvtCorner, setPvtCorner] = useState<ProcessCorner>('TT');
-  const [pvtVoltage, setPvtVoltage] = useState<number>(1.0);
-  const [pvtTemperature, setPvtTemperature] = useState<number>(25);
+  const [localPvtCorner, setLocalPvtCorner] = useState<ProcessCorner>('TT');
+  const [localPvtVoltage, setLocalPvtVoltage] = useState<number>(1.0);
+  const [localPvtTemperature, setLocalPvtTemperature] = useState<number>(25);
+
+  const pvtCorner = propPvtCorner !== undefined ? propPvtCorner : localPvtCorner;
+  const setPvtCorner = propSetPvtCorner !== undefined ? propSetPvtCorner : setLocalPvtCorner;
+  const pvtVoltage = propPvtVoltage !== undefined ? propPvtVoltage : localPvtVoltage;
+  const setPvtVoltage = propSetPvtVoltage !== undefined ? propSetPvtVoltage : setLocalPvtVoltage;
+  const pvtTemperature = propPvtTemperature !== undefined ? propPvtTemperature : localPvtTemperature;
+  const setPvtTemperature = propSetSetPvtTemperature !== undefined ? propSetSetPvtTemperature : setLocalPvtTemperature;
 
   // Macro Dropper Floorplan State
   const [placedMacros, setPlacedMacros] = useState<PlacedMacro[]>([

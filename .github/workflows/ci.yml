@@ -1,4 +1,4 @@
-name: Kansen Silicon Net V4.0 CI Workflow
+name: Kansen Core EDA Console CI Workflow
 
 on:
   push:
