@@ -1,0 +1,22 @@
+# KANSEN SILICON NET // NETLIFY ENTERPRISE CONFIGURATION
+
+[build]
+  command = "bun run build"
+  publish = "dist"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    # Enforce strict isolation so SharedArrayBuffer can run parallel simulation threads
+    Cross-Origin-Opener-Policy = "same-origin"
+    Cross-Origin-Embedder-Policy = "require-corp"
+    
+    # Industrial-grade edge security configurations
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
