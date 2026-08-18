@@ -169,7 +169,6 @@ export class KansenBitStreamTester {
   }
 }
 
-export const ArasakaBitStreamTester = KansenBitStreamTester;
 
 // PVT Variation Stress Engine
 export class PvtEngine {

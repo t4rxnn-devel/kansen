@@ -3,7 +3,7 @@ import { SectorType, FabModule, EdaLab, TerminalLog } from './types';
 import { fabModulesData } from './data/fabModules';
 import { edaLabsData } from './data/edaLabs';
 import { soundFx } from './utils/soundEffects';
-import { ArasakaBitStreamTester, executeTapeoutSequencer } from './utils/kansenEngine';
+import { KansenBitStreamTester, executeTapeoutSequencer } from './utils/kansenEngine';
 
 import { TopHUDHeader } from './components/TopHUDHeader';
 import { LeftCommandSidebar } from './components/LeftCommandSidebar';
@@ -61,7 +61,7 @@ export default function App() {
 
   // Git VCS Commit History
   const [vcsHistory, setVcsHistory] = useState([
-    { id: '1', hash: '8f92a11', timestamp: '10:42:01', author: 'Saburo Arasaka', message: 'Init GAAFET 3nm PDK Rules' },
+    { id: '1', hash: '8f92a11', timestamp: '10:42:01', author: 'Kansen Principal', message: 'Init GAAFET 3nm PDK Rules' },
     { id: '2', hash: '3c19e04', timestamp: '11:15:22', author: 'Sovereign Core', message: 'Synthesized Inverter Netlist' },
     { id: '3', hash: 'a402d99', timestamp: '12:00:10', author: 'Yosys Engine', message: 'WASM SIMD Optimization Pass' }
   ]);
@@ -230,7 +230,7 @@ export default function App() {
     addLog('SYNTH', `EXECUTING AUTOMATED TESTBENCH SUITE FOR [${currentEdaLab.title.toUpperCase()}]...`, 'TESTBENCH');
 
     // PRBS-31 Bitstream Test Vector Verification
-    const bitstreamResults = ArasakaBitStreamTester.verifyBitstreamPattern();
+    const bitstreamResults = KansenBitStreamTester.verifyBitstreamPattern();
     addLog('INFO', `PRBS-31 LOOPBACK: ${bitstreamResults.passed}/${bitstreamResults.totalVectors} VECTORS VERIFIED (BER: ${bitstreamResults.ber})`, 'BITSTREAM');
 
     currentEdaLab.testbenchCases.forEach((tc, idx) => {
@@ -265,7 +265,7 @@ export default function App() {
 
   // Command Line Prompt Executor
   const handleExecuteCommand = (cmd: string) => {
-    addLog('INFO', `ARASAKA> ${cmd}`, 'USER_INPUT');
+    addLog('INFO', `KANSEN> ${cmd}`, 'USER_INPUT');
     const cleanCmd = cmd.toLowerCase().trim();
 
     if (cleanCmd === 'help') {
@@ -288,7 +288,7 @@ export default function App() {
       setScanlinesEnabled(!scanlinesEnabled);
       addLog('INFO', `CRT SCANLINES OVERLAY TOGGLED.`, 'CLI_THEME');
     } else if (cleanCmd === 'info') {
-      addLog('INFO', 'ARASAKA SILICON NET V4.0 // 3nm GAA EDA & FAB SYSTEM // CLASSIFIED TIER 5', 'SYS_INFO');
+      addLog('INFO', 'KANSEN SILICON NET V4.0 // 3nm GAA EDA & FAB SYSTEM // CLASSIFIED TIER 5', 'SYS_INFO');
     } else {
       addLog('ERR', `UNKNOWN COMMAND '${cmd}'. TYPE 'help' FOR LIST OF SYSTEM COMMANDS.`, 'CLI_ERR');
     }

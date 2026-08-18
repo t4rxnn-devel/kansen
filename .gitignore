@@ -1,8 +1,79 @@
+# KANSEN SILICON NET V4.0 // CUSTOM REPOSITORY .GITIGNORE
+# ==============================================================================
+
+# Dependency Directories
 node_modules/
-build/
+jspm_packages/
+web_modules/
+
+# Build & Compilation Outputs
 dist/
-coverage/
-.DS_Store
-*.log
-.env*
+dist-ssr/
+build/
+out/
+bin/
+*.tsbuildinfo
+
+# Temporary & Cache Directories
+.cache/
+.parcel-cache/
+.eslintcache/
+.stylelintcache/
+.node_repl_history/
+*.esm.js
+*.cjs.js
+
+# Local Environment & Secret Files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 !.env.example
+
+# Semiconductor EDA & CAD Binary Artifacts
+*.gds
+*.gds2
+*.oas
+*.def
+*.lef
+*.vcd
+*.zip
+tapeout_bundles/
+
+# Logs & Diagnostics
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Testing & Coverage Reports
+coverage/
+.nyc_output/
+cypress/screenshots/
+cypress/videos/
+
+# IDE & Editor Settings
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/tasks.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+*.swo
+
+# OS Specific Junk
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db

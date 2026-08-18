@@ -1,4 +1,4 @@
-// Web Audio API Sci-Fi Sound Synthesizer for Arasaka Silicon Net Console
+// Web Audio API Sci-Fi Sound Synthesizer for Kansen Silicon Net Console
 
 class SoundEngine {
   private ctx: AudioContext | null = null;
