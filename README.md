@@ -5,7 +5,7 @@
  | . \     / ___ \ ||  _ /| |___| |\  |   ___) | || |___| \ |__| |_| | |\  | |__   _| |_| |
  |_|\_\   /_/   \_\_|_| \_\_____|_| \_|  |____/___|_____|__\____\___/|_| \_|    |_|  \___/ 
                                                                                            
-   K A N S E N   C O R E   E D A   C O N S O L E   //   3 N M   G A A   E D A   &   F A B
+               K A N S E N   C O N S O L E   //   3 N M   G A A   E D A   &   F A B
 ```
 
 [![Build Status](https://img.shields.io/badge/BUILD-SUCCESS-emerald?style=for-the-badge&logo=githubactions&logoColor=white)](https://github.com/)
@@ -14,7 +14,7 @@
 [![ISO Cleanroom](https://img.shields.io/badge/ISO%2014644--1-CLASS--3%20CLEANROOM-amber?style=for-the-badge)](#)
 [![ASML Metrology](https://img.shields.io/badge/ASML-HIGH--NA%20EUV%200.55-purple?style=for-the-badge)](#)
 
-> **KANSEN CORE EDA CONSOLE** is an enterprise-grade, browser-native Electronic Design Automation (EDA) and Semiconductor Cleanroom Certification platform. Designed for principal hardware architects, micro-architects, and process engineers, it integrates live IEEE-1364 Verilog synthesis, netlist schematics, 3D logic waveforms, PVT variation stress testing, ASML EUV photolithography metrology, and binary GDSII tape-out stream generation.
+> **KANSEN CONSOLE** is an enterprise-grade, browser-native Electronic Design Automation (EDA) and Semiconductor Cleanroom Certification platform. Designed for principal hardware architects, micro-architects, and process engineers, it integrates live IEEE-1364 Verilog synthesis, netlist schematics, 3D logic waveforms, PVT variation stress testing, ASML EUV photolithography metrology, and binary GDSII tape-out stream generation.
 
 ---
 
@@ -33,7 +33,7 @@
 
 ## 📐 System Architecture: The Four Quadrants
 
-Kansen Core EDA Console splits the workstation into four synchronized live quadrants:
+Kansen CONSOLE splits the workstation into four synchronized live quadrants:
 
 ```
 +------------------------------------------+------------------------------------------+
@@ -153,7 +153,7 @@ The bottom log console includes an interactive terminal command parser (`KANSEN>
 ## 📄 Academic Attribution & Disclaimers
 
 - Photolithography architectural reference and metrology system concepts are attributed to **ASML Holding N.V.** (Veldhoven, Netherlands).
-- Kansen Core EDA Console is an educational and enterprise simulation platform.
+- Kansen CONSOLE is an educational and enterprise simulation platform.
 
 ---
 
@@ -161,4 +161,4 @@ The bottom log console includes an interactive terminal command parser (`KANSEN>
 
 Distributed under the **MIT License**. See `LICENSE` for more information.
 
-*(C) 2026 Kansen Core Systems. All Rights Reserved.*
+*(C) 2026 Kansen Systems. All Rights Reserved.*

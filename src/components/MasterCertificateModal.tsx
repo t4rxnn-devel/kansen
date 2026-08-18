@@ -30,7 +30,7 @@ export const MasterCertificateModal: React.FC<MasterCertificateModalProps> = ({
   const handleLinkedInShare = () => {
     soundFx.playClick();
     const text = encodeURIComponent(
-      `I have officially earned the Master Semiconductor Fabrication & 3nm EDA Certificate on KANSEN CORE EDA CONSOLE! Security Clearance: ${userSession?.securityId || 'SEC-L5'}.`
+      `I have officially earned the Master Semiconductor Fabrication & 3nm EDA Certificate on KANSEN CONSOLE! Security Clearance: ${userSession?.securityId || 'SEC-L5'}.`
     );
     const linkedInUrl = `https://www.linkedin.com/feed/?shareActive=true&text=${text}`;
     window.open(linkedInUrl, '_blank', 'noopener,noreferrer');

@@ -1,4 +1,4 @@
-// Web Audio API Sci-Fi Sound Synthesizer for Kansen Core EDA Console
+// Web Audio API Sci-Fi Sound Synthesizer for Kansen CONSOLE
 
 class SoundEngine {
   private ctx: AudioContext | null = null;

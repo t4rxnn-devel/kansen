@@ -9,7 +9,7 @@ export const edaLabsData: EdaLab[] = [
     clearanceLevel: 'LEVEL-1 // GATE-FOUNDATION',
     icon: 'ToggleLeft',
     description: 'Fundamental CMOS NOT logic gate comprising PMOS pull-up and NMOS pull-down transistors. Analyzes propagation delay t_pd, noise margins, and dynamic power consumption.',
-    verilogCode: `// Kansen Core EDA - CMOS Inverter Module
+    verilogCode: `// Kansen CONSOLE - CMOS Inverter Module
 // Technology Node: 3nm FinFET GAA
 module inverter_gate (
   input  wire in_a,
@@ -79,7 +79,7 @@ endmodule
     clearanceLevel: 'LEVEL-2 // COMBINATIONAL-LOGIC',
     icon: 'Split',
     description: 'Selects between two data lines (D0, D1) using a select line (SEL) to drive output Y. Implemented with transmission gate logic in 3nm FinFET.',
-    verilogCode: `// Kansen Core EDA - 2-to-1 MUX Module
+    verilogCode: `// Kansen CONSOLE - 2-to-1 MUX Module
 module mux21 (
   input  wire d0,
   input  wire d1,
@@ -154,7 +154,7 @@ endmodule
     clearanceLevel: 'LEVEL-3 // SEQUENTIAL-RTL',
     icon: 'Cpu',
     description: 'A 4-bit Serial-In Parallel-Out (SIPO) shift register constructed with cascading master-slave D-flip-flops. Converts serial data stream into 4-bit parallel word output Q[3:0].',
-    verilogCode: `// Kansen Core EDA - 4-bit SIPO Shift Register
+    verilogCode: `// Kansen CONSOLE - 4-bit SIPO Shift Register
 module shift_reg_4bit (
   input  wire       clk,
   input  wire       rst_n,
@@ -235,7 +235,7 @@ endmodule
     clearanceLevel: 'LEVEL-4 // COMPLEX-RTL',
     icon: 'Workflow',
     description: 'A 3-state Moore Finite State Machine controlling intersection traffic signals (RED -> GREEN -> YELLOW -> RED) based on timer count ticks.',
-    verilogCode: `// Kansen Core EDA - Traffic Light FSM
+    verilogCode: `// Kansen CONSOLE - Traffic Light FSM
 module fsm_traffic (
   input  wire       clk,
   input  wire       rst_n,
@@ -335,7 +335,7 @@ endmodule
     clearanceLevel: 'LEVEL-5 // UVM-VERIFICATION',
     icon: 'Shield',
     description: 'SystemVerilog UVM testbench environment featuring UVM Agent, Sequencer, Driver, Monitor, and Scoreboard modules for full functional coverage verification.',
-    verilogCode: `// Kansen Core EDA - SystemVerilog UVM Verification Environment
+    verilogCode: `// Kansen CONSOLE - SystemVerilog UVM Verification Environment
 class kansen_env extends uvm_env;
   \`uvm_component_utils(kansen_env)
 

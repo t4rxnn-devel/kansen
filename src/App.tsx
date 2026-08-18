@@ -87,7 +87,7 @@ export default function App() {
       id: '1',
       timestamp: new Date().toISOString().substring(11, 23),
       type: 'INFO',
-      message: 'KANSEN CORE EDA CONSOLE INITIALIZED.',
+      message: 'KANSEN CONSOLE INITIALIZED.',
       source: 'SYS_CORE'
     },
     {
@@ -292,7 +292,7 @@ export default function App() {
       setScanlinesEnabled(!scanlinesEnabled);
       addLog('INFO', `CRT SCANLINES OVERLAY TOGGLED.`, 'CLI_THEME');
     } else if (cleanCmd === 'info') {
-      addLog('INFO', 'KANSEN CORE EDA CONSOLE // 3nm GAA EDA & FAB SYSTEM // CLASSIFIED TIER 5', 'SYS_INFO');
+      addLog('INFO', 'KANSEN CONSOLE // 3nm GAA EDA & FAB SYSTEM // CLASSIFIED TIER 5', 'SYS_INFO');
     } else {
       addLog('ERR', `UNKNOWN COMMAND '${cmd}'. TYPE 'help' FOR LIST OF SYSTEM COMMANDS.`, 'CLI_ERR');
     }

@@ -62,7 +62,7 @@ export const TopHUDHeader: React.FC<TopHUDHeaderProps> = ({
         <div>
           <div className="flex items-center gap-2">
             <h1 className="font-orbitron font-black text-sm tracking-wider text-white">
-              KANSEN <span className="text-[#dc2626]">CORE EDA</span>
+              KANSEN <span className="text-[#dc2626]">CONSOLE</span>
             </h1>
             <span className="bg-[#dc2626]/20 text-[#dc2626] text-[10px] font-bold px-1.5 py-0.5 rounded border border-[#dc2626]/40 font-mono">
               SOVEREIGN CONSOLE
