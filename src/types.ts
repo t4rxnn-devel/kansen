@@ -152,6 +152,11 @@ export interface SatResult {
   clauses: string[];
   executionTimeMs: number;
   message: string;
+  dpllSteps?: string[];
+  decisionsCount?: number;
+  unitPropagationsCount?: number;
+  backtracksCount?: number;
+  learnedClauses?: string[];
 }
 
 // Smart ECO (Engineering Change Order) Delta Patch

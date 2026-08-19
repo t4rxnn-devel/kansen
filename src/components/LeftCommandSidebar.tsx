@@ -375,19 +375,6 @@ export const LeftCommandSidebar: React.FC<LeftCommandSidebarProps> = ({
         </div>
       )}
 
-      {/* Footer Action */}
-      <div className="p-3 border-t border-[#18181b] bg-[#050505]">
-        <button
-          onClick={() => {
-            soundFx.playSynthPass();
-            onRunAllTests();
-          }}
-          className="w-full py-2 px-3 bg-[#dc2626] hover:bg-[#b91c1c] text-white font-orbitron font-bold text-xs rounded border border-[#dc2626] shadow-[0_0_15px_rgba(220,38,38,0.4)] transition flex items-center justify-center gap-2"
-        >
-          <Sparkles className="w-3.5 h-3.5 animate-spin" style={{ animationDuration: '3s' }} />
-          <span>MACRO BENCHMARK PASS</span>
-        </button>
-      </div>
     </aside>
   );
 };

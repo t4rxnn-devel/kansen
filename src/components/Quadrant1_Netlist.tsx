@@ -9,6 +9,8 @@ interface Quadrant1_NetlistProps {
   nodes: SchematicNode[];
   isSimulating: boolean;
   onToggleNodeState?: (nodeId: string) => void;
+  selectedSignal?: string | null;
+  onSelectSignal?: (sigName: string | null) => void;
 }
 
 export const Quadrant1_Netlist: React.FC<Quadrant1_NetlistProps> = ({
@@ -16,11 +18,30 @@ export const Quadrant1_Netlist: React.FC<Quadrant1_NetlistProps> = ({
   subtitle,
   nodes: initialNodes,
   isSimulating,
-  onToggleNodeState
+  onToggleNodeState,
+  selectedSignal,
+  onSelectSignal
 }) => {
   const [zoomLevel, setZoomLevel] = useState(1);
   const [activeNodeId, setActiveNodeId] = useState<string | null>(null);
   const [highlightedNet, setHighlightedNet] = useState<string | null>(null);
+
+  // Synchronize incoming selectedSignal with schematic highlight
+  React.useEffect(() => {
+    if (selectedSignal) {
+      const matchNode = initialNodes.find(n => 
+        n.label.toUpperCase() === selectedSignal.toUpperCase() || 
+        n.id.toUpperCase() === selectedSignal.toUpperCase()
+      );
+      if (matchNode) {
+        setHighlightedNet(matchNode.id);
+        setActiveNodeId(matchNode.id);
+      }
+    } else {
+      setHighlightedNet(null);
+      setActiveNodeId(null);
+    }
+  }, [selectedSignal, initialNodes]);
 
   // Tooltip overlay state on gate mouseenter
   const [hoveredNode, setHoveredNode] = useState<SchematicNode | null>(null);
@@ -186,6 +207,7 @@ export const Quadrant1_Netlist: React.FC<Quadrant1_NetlistProps> = ({
             onClick={(e) => {
               e.stopPropagation();
               if (onToggleNodeState) onToggleNodeState(node.id);
+              if (onSelectSignal) onSelectSignal(node.label.toUpperCase());
             }}
           >
             <rect
@@ -213,6 +235,11 @@ export const Quadrant1_Netlist: React.FC<Quadrant1_NetlistProps> = ({
             onMouseDown={(e) => handleMouseDown(node.id, e)}
             onMouseEnter={(e) => handleGateMouseEnter(node, e)}
             onMouseLeave={handleGateMouseLeave}
+            onClick={(e) => {
+              e.stopPropagation();
+              soundFx.playClick();
+              if (onSelectSignal) onSelectSignal(node.label.toUpperCase());
+            }}
           >
             <polygon
               points={`${pos.x},${pos.y - 14} ${pos.x + 50},${pos.y - 14} ${pos.x + 65},${pos.y} ${pos.x + 50},${pos.y + 14} ${pos.x},${pos.y + 14}`}
@@ -343,6 +370,9 @@ export const Quadrant1_Netlist: React.FC<Quadrant1_NetlistProps> = ({
                   soundFx.playClick();
                   setHighlightedNet(sourceNode.id);
                   setActiveNodeId(sourceNode.id);
+                  if (onSelectSignal) {
+                    onSelectSignal(sourceNode.label.toUpperCase());
+                  }
                 }}
               >
                 <path

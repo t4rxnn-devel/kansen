@@ -77,6 +77,10 @@ export default function App() {
   const [isIdentityModalOpen, setIsIdentityModalOpen] = useState<boolean>(false);
   const [isSynthesizing, setIsSynthesizing] = useState<boolean>(false);
 
+  // Cross-probing & SAT solver modes
+  const [selectedSignal, setSelectedSignal] = useState<string | null>(null);
+  const [satSolverMode, setSatSolverMode] = useState<'HEURISTIC' | 'EXACT'>('HEURISTIC');
+
   // System Diagnostic Logs State
   const [pvtCorner, setPvtCorner] = useState<ProcessCorner>('TT');
   const [pvtVoltage, setPvtVoltage] = useState<number>(1.0);
@@ -361,7 +365,7 @@ export default function App() {
         />
 
         {/* Central & Tactical Panels */}
-        <main className="flex-1 overflow-hidden p-2 bg-[#000000]">
+        <main className="flex-1 overflow-y-auto p-2.5 bg-[#000000] scrollbar-thin scrollbar-thumb-zinc-800">
           {activeSector === 'ALPHA' ? (
             /* SECTOR ALPHA: Fab Certification View */
             <FabCertificationView
@@ -370,20 +374,22 @@ export default function App() {
             />
           ) : (
             /* SECTOR BETA: 4-Quadrant EDA Layout Grid */
-            <div className="w-full h-full grid grid-cols-1 lg:grid-cols-2 grid-rows-2 gap-2">
+            <div className="w-full grid grid-cols-1 xl:grid-cols-2 gap-3.5 pb-6">
               {/* QUADRANT I: Schematic Netlist */}
-              <div className="h-full overflow-hidden">
+              <div className="min-h-[450px] xl:h-[calc(48vh-30px)] overflow-hidden">
                 <Quadrant1_Netlist
                   title={currentEdaLab.title}
                   subtitle={currentEdaLab.subtitle}
                   nodes={currentEdaLab.schematicNodes}
                   isSimulating={isSynthesizing}
                   onToggleNodeState={handleToggleNodeState}
+                  selectedSignal={selectedSignal}
+                  onSelectSignal={setSelectedSignal}
                 />
               </div>
 
               {/* QUADRANT II: Hardware Code Terminal */}
-              <div className="h-full overflow-hidden">
+              <div className="min-h-[450px] xl:h-[calc(48vh-30px)] overflow-hidden">
                 <Quadrant2_CodeEditor
                   labTitle={currentEdaLab.title}
                   verilogCode={currentEdaLab.verilogCode}
@@ -392,22 +398,26 @@ export default function App() {
                   onRunTestbench={handleRunTestbench}
                   onResetCode={handleResetCode}
                   isSynthesizing={isSynthesizing}
+                  satSolverMode={satSolverMode}
+                  onSetSatSolverMode={setSatSolverMode}
                 />
               </div>
 
               {/* QUADRANT III: Waveform Logic Analyzer */}
-              <div className="h-full overflow-hidden">
+              <div className="min-h-[450px] xl:h-[calc(48vh-30px)] overflow-hidden">
                 <Quadrant3_WaveformAnalyzer
                   signals={currentEdaLab.defaultSignals}
                   isSimulating={isSynthesizing}
                   pvtCorner={pvtCorner}
                   pvtVoltage={pvtVoltage}
                   pvtTemperature={pvtTemperature}
+                  selectedSignal={selectedSignal}
+                  onSelectSignal={setSelectedSignal}
                 />
               </div>
 
               {/* QUADRANT IV: Silicon Telemetry & 3D Wafer */}
-              <div className="h-full overflow-hidden">
+              <div className="min-h-[450px] xl:h-[calc(48vh-30px)] overflow-hidden">
                 <Quadrant4_TelemetryWafer
                   telemetry={currentEdaLab.telemetry}
                   layoutLayers={currentEdaLab.layoutLayers}
@@ -421,6 +431,7 @@ export default function App() {
                   setPvtVoltage={setPvtVoltage}
                   pvtTemperature={pvtTemperature}
                   setPvtTemperature={setPvtTemperature}
+                  satSolverMode={satSolverMode}
                 />
               </div>
             </div>
@@ -441,6 +452,7 @@ export default function App() {
         currentCode={currentEdaLab?.verilogCode}
         currentTitle={currentEdaLab?.title}
         onUpdateCode={(newCode) => handleCodeChange(newCode)}
+        isSynthesizing={isSynthesizing}
       />
 
       {/* Enterprise Identity Session Modal */}
